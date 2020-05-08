@@ -8,18 +8,35 @@ attr_reader :player1, :player2, :spoils_of_war
   end
 
   def type
-    if @spoils_of_war = [] || @spoils_of_war.count == 2
-      return :basic
+    player1_card_0 = @player1.deck.rank_of_card_at(0)
+    player2_card_0 = @player2.deck.rank_of_card_at(0)
+    if  player1_card_0 > player2_card_0 || player2_card_0 > player1_card_0
+      :basic
     else
-      return nil
+      nil
     end
   end
 
   def winner
-    if @player1.deck.rank_of_card_at(0) > player2.deck.rank_of_card_at(0)
+    player1_card_0 = @player1.deck.rank_of_card_at(0)
+    player2_card_0 = @player2.deck.rank_of_card_at(0)
+
+    if player1_card_0 > player2_card_0
       @player1
-    else
+    elsif player2_card_0 > player1_card_0
       @player2
+    else
+      nil
     end
   end
-end
+
+    def pile_cards
+      player1_card_0 = @player1.deck.rank_of_card_at(0)
+      player2_card_0 = @player2.deck.rank_of_card_at(0)
+      if player1_card_0 > player2_card_0
+        @spoils_of_war << @player1.deck.remove_card
+        @spoils_of_war << @player2.deck.remove_card
+      end
+    end
+
+  end
