@@ -1,9 +1,15 @@
+require 'pry'
 class GameFunctionality
-  attr_reader :deck
-
+  attr_reader :starter_deck
 
   def initialize
-  @deck = [card1 = Card.new(:heart, '2', 2),
+    @shuffled_deck = []
+    @player1_deck
+    @player2_deck
+    @player1
+    @player2
+
+    @starter_deck = [card1 = Card.new(:heart, '2', 2),
     card2 = Card.new(:heart, '3', 3),
     card3 = Card.new(:heart, '4', 4),
     card4 = Card.new(:heart, '5', 5),
@@ -57,4 +63,20 @@ class GameFunctionality
     card52 = Card.new(:spade, 'Ace', 14)]
   end
 
+  def start
+    @shuffled_deck << @starter_deck.shuffle
+
+    @player1_deck = Deck.new(@shuffled_deck.flatten[26..52])
+    @player2_deck = Deck.new(@shuffled_deck.flatten[0..26])
+
+    @player1 = Player.new('Megan', @player1_deck)
+    @player2 = Player.new('Aurora', @player2_deck)
+
+    p "Welcome to War! (or Peace) This game will be played with 52 cards."
+    p "The players today are #{@player1.name} and #{@player2.name}."
+    p "Type 'GO' to start the game!"
+    p "-----------------------------------------------"
+
+    gets.chomp
+  end
 end

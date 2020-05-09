@@ -16,7 +16,6 @@ class GameFunctionalityTest < Minitest::Test
   def test_it_has_a_52_card_deck
     game = GameFunctionality.new
 
-
-    assert_equal 52, game.deck.count
+    assert_equal 52, game.starter_deck.count
   end
 end
