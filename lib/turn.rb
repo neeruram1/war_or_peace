@@ -15,11 +15,11 @@ attr_reader :player1, :player2, :spoils_of_war
 
     if  player1_card_0 > player2_card_0 || player2_card_0 > player1_card_0
       :basic
+    elsif player1_card_0 == player2_card_0 && player1_card_2 == player2_card_2
+      :mutually_assured_destruction
     elsif
       player1_card_0 == player2_card_0
       :war
-    elsif player1_card_0 == player2_card_0 && player1_card_2 == player2_card_2
-      :mutually_assured_destruction
     end
   end
 
@@ -33,8 +33,9 @@ attr_reader :player1, :player2, :spoils_of_war
       @player1
     elsif player2_card_0 > player1_card_0
       @player2
-    elsif
-      player1_card_0 == player2_card_0 && player1_card_2 > player2_card_2
+    elsif player1_card_0 == player2_card_0 && player1_card_2 == player2_card_2
+      "No Winner"
+    elsif player1_card_0 == player2_card_0 && player1_card_2 > player2_card_2
       @player1
     elsif
       player1_card_0 == player2_card_0 && player2_card_2 > player1_card_2
@@ -51,6 +52,13 @@ attr_reader :player1, :player2, :spoils_of_war
     if player1_card_0 > player2_card_0 || player2_card_0 > player1_card_0
       @spoils_of_war << @player1.deck.remove_card
       @spoils_of_war << @player2.deck.remove_card
+    elsif player1_card_0 == player2_card_0 && player1_card_2 == player2_card_2
+      @player1.deck.remove_card
+      @player1.deck.remove_card
+      @player1.deck.remove_card
+      @player2.deck.remove_card
+      @player2.deck.remove_card
+      @player2.deck.remove_card
     elsif player1_card_0 == player2_card_0
       @spoils_of_war << @player1.deck.remove_card
       @spoils_of_war << @player1.deck.remove_card
@@ -59,6 +67,7 @@ attr_reader :player1, :player2, :spoils_of_war
       @spoils_of_war << @player2.deck.remove_card
       @spoils_of_war << @player2.deck.remove_card
     end
+    @spoils_of_war
   end
 
   def award_spoils(winner)
