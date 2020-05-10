@@ -1,28 +1,25 @@
 class Deck
   attr_reader :cards
 
-  def initialize(cards = [])
-    @cards = cards
+  def initialize(cards_param = [])
+    @cards = cards_param
   end
 
-  def rank_of_card_at(num_param)
-    if @cards[num_param].nil?
+  def rank_of_card_at(index)
+    if @cards.empty? == false
+      @cards[index].rank
+    else
       @cards = []
-    else @cards[num_param].nil? == false
-      @cards[num_param].rank
     end
-
   end
 
   def high_ranking_cards
     high_ranked_cards = []
-
     @cards.each do |card|
       if card.rank > 11
         high_ranked_cards << card
       end
     end
-
     high_ranked_cards
   end
 
