@@ -1,18 +1,22 @@
 require 'pry'
 class GameFunctionality
-  attr_reader :starter_deck
+  attr_reader :starter_deck,
+              :deck1,
+              :deck2,
+              :player1,
+              :player2
 
-  def initialize
-    @shuffled_deck = []
-    @player1_deck
-    @player2_deck
-    @player1
-    @player2
+  def initialize(initial_deck = [])
+    @starter_deck = initial_deck
+    @deck1 = []
+    @deck2 = []
+  end
 
-    @starter_deck = [card1 = Card.new(:heart, '2', 2),
+  def add_cards_starter_deck
+    @starter_deck << [card1 = Card.new(:heart, '2', 2), #index0
     card2 = Card.new(:heart, '3', 3),
-    card3 = Card.new(:heart, '4', 4),
-    card4 = Card.new(:heart, '5', 5),
+    card3 = Card.new(:heart, '4', 5), #index2
+    card4 = Card.new(:heart, '5', 5), #index3
     card5 = Card.new(:heart, '6', 6),
     card6 = Card.new(:heart, '7', 7),
     card7 = Card.new(:heart, '8', 8),
@@ -23,8 +27,8 @@ class GameFunctionality
     card12 = Card.new(:heart, 'King', 13),
     card13 = Card.new(:heart, 'Ace', 14),
     card14 = Card.new(:club, '2', 2),
-    card15 = Card.new(:club, '3', 3),
-    card16 = Card.new(:club, '4', 4),
+    card15 = Card.new(:club, '3', 2),
+    card16 = Card.new(:club, '4', 2),
     card17 = Card.new(:club, '5', 5),
     card18 = Card.new(:club, '6', 6),
     card19 = Card.new(:club, '7', 7),
@@ -35,10 +39,11 @@ class GameFunctionality
     card24 = Card.new(:club, 'Queen', 12),
     card25 = Card.new(:club, 'King', 13),
     card26 = Card.new(:club, 'Ace', 14),
-    card27 = Card.new(:diamond, '2', 2),
-    card28 = Card.new(:diamond, '3', 3),
-    card29 = Card.new(:diamond, '4', 4),
-    card30 = Card.new(:diamond, '5', 5),
+    #this is where the deck is split
+    card27 = Card.new(:diamond, '2', 3), #index0
+    card28 = Card.new(:diamond, '3', 2),
+    card29 = Card.new(:diamond, '4', 4), #index2
+    card30 = Card.new(:diamond, '5', 5), #index3
     card31 = Card.new(:diamond, '6', 6),
     card32 = Card.new(:diamond, '7', 7),
     card33 = Card.new(:diamond, '8', 8),
@@ -61,17 +66,26 @@ class GameFunctionality
     card50 = Card.new(:spade, 'Queen', 12),
     card51 = Card.new(:spade, 'King', 13),
     card52 = Card.new(:spade, 'Ace', 14)]
+    @starter_deck = @starter_deck.flatten
+  end
+
+  def split_deck
+    @deck1 = Deck.new(@starter_deck[0..25])
+    @deck2 = Deck.new(@starter_deck[26..51])
+  end
+
+  def shuffle_deck
+    @deck1.cards.shuffle!
+    @deck2.cards.shuffle!
+  end
+
+  def add_players
+    @player1 = Player.new('Megan', @deck1)
+    @player2 = Player.new('Aurora', @deck2)
   end
 
   def start
-    @shuffled_deck << @starter_deck.shuffle
-
-    @player1_deck = Deck.new(@shuffled_deck.flatten[26..52])
-    @player2_deck = Deck.new(@shuffled_deck.flatten[0..26])
-
-    @player1 = Player.new('Megan', @player1_deck)
-    @player2 = Player.new('Aurora', @player2_deck)
-
+    turn = Turn.new(@player1, @player2)
     p "Welcome to War! (or Peace) This game will be played with 52 cards."
     p "The players today are #{@player1.name} and #{@player2.name}."
     p "Type 'GO' to start the game!"
@@ -80,42 +94,30 @@ class GameFunctionality
     gets.chomp
 
     count = 0
-    loop do
-      count += 1
 
-      turn = Turn.new(@player1, @player2)
+    until @player1.has_lost? || @player2.has_lost? || count == 1000000
+      count += 1
       turn.type
       winner = turn.winner
-      turn.pile_cards
-      spoils = turn.spoils_of_war
-      turn.award_spoils(winner)
-      # winner.deck.cards.flatten
 
+        if turn.type == :mutually_assured_destruction
+          p "Turn #{count}: **mutually assured destruction** 6 cards removed from play"
+        elsif turn.type == :war
+          p "Turn #{count}: WAR - #{winner.name} won 6 cards"
+        else turn.type == :basic
+          p "Turn #{count}: #{winner.name} won 2 cards"
+        end
 
-      if turn.type == :basic
-        p "Turn #{count}: #{winner.name} won #{turn.pile_cards.count} cards"
-      elsif turn.type == :war
-        p "Turn #{count}: WAR - #{winner.name} won #{turn.pile_cards.count} cards"
-      elsif turn.type == :mutually_assured_destruction
-        p "Turn #{count}: *mutually assured destruction* #{turn.pile_cards.count} removed from play"
-      elsif @player1.has_lost? == true
-        p "*~*~*~ #{@player2.name} has won the game!"
-        break
-      elsif @player2.has_lost? == true
-        p "*~*~*~ #{@player1.name} has won the game!"
-        break
-      else
-        break
+        turn.pile_cards
+        turn.award_spoils(winner)
+
+        if @player1.has_lost?
+          p "*~*~ #{@player2.name} has won the game!!!!! *~*~"
+        elsif @player2.has_lost?
+          p "*~*~ #{@player1.name} has won the game!!!!! *~*~"
+        end
       end
-
-
-
-      if count == 10000
-        break
-      end
+      p "------DRAW-------"
 
     end
-
-
   end
-end

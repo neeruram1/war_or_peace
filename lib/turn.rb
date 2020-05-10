@@ -57,7 +57,11 @@ class Turn
   end
 
   def award_spoils(winner_param)
-    winner_param.deck.add_card(@spoils_of_war)
-    @spoils_of_war = []
+    if winner_param == "No Winner"
+      @spoils_of_war = []
+    else
+      winner_param.deck.add_card(@spoils_of_war)
+      @spoils_of_war = []
+    end
   end
 end

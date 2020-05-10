@@ -6,9 +6,9 @@ class Deck
   end
 
   def rank_of_card_at(index)
-    if @cards.empty? == false
+    if @cards[0].nil? == false
       @cards[index].rank
-    else
+    elsif @cards[0].nil? == true
       @cards = []
     end
   end
