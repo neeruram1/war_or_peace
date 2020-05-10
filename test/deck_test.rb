@@ -27,6 +27,19 @@ class DeckTest < Minitest::Test
     assert_equal 14, deck.rank_of_card_at(2)
   end
 
+  def test_if_card_has_no_rank
+    card1 = Card.new(:diamond, 'Queen', 12)
+    card2 = Card.new(:spade, '3', 3)
+    card3 = Card.new(:heart, 'Ace', 14)
+    cards = [card1, card2, card3]
+    deck = Deck.new(cards)
+    deck.remove_card
+    deck.remove_card
+    deck.remove_card
+
+    assert_equal [], deck.rank_of_card_at(0)
+  end
+
   def test_if_card_has_high_rank
     card1 = Card.new(:diamond, 'Queen', 12)
     card2 = Card.new(:spade, '3', 3)
