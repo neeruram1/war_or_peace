@@ -78,5 +78,44 @@ class GameFunctionality
     p "-----------------------------------------------"
 
     gets.chomp
+
+    count = 0
+    loop do
+      count += 1
+
+      turn = Turn.new(@player1, @player2)
+      turn.type
+      winner = turn.winner
+      turn.pile_cards
+      spoils = turn.spoils_of_war
+      turn.award_spoils(winner)
+      # winner.deck.cards.flatten
+
+
+      if turn.type == :basic
+        p "Turn #{count}: #{winner.name} won #{turn.pile_cards.count} cards"
+      elsif turn.type == :war
+        p "Turn #{count}: WAR - #{winner.name} won #{turn.pile_cards.count} cards"
+      elsif turn.type == :mutually_assured_destruction
+        p "Turn #{count}: *mutually assured destruction* #{turn.pile_cards.count} removed from play"
+      elsif @player1.has_lost? == true
+        p "*~*~*~ #{@player2.name} has won the game!"
+        break
+      elsif @player2.has_lost? == true
+        p "*~*~*~ #{@player1.name} has won the game!"
+        break
+      else
+        break
+      end
+
+
+
+      if count == 10000
+        break
+      end
+
+    end
+
+
   end
 end

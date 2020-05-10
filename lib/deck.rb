@@ -6,7 +6,12 @@ class Deck
   end
 
   def rank_of_card_at(num_param)
-    @cards[num_param].rank
+    if @cards[num_param].nil?
+      @cards = []
+    else @cards[num_param].nil? == false
+      @cards[num_param].rank
+    end
+
   end
 
   def high_ranking_cards
@@ -43,5 +48,6 @@ class Deck
 
   def add_card(new_card)
     @cards << new_card
+    @cards = @cards.flatten
   end
 end
