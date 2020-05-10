@@ -227,6 +227,36 @@ class TurnTest < Minitest::Test
     assert_equal "No Winner", winner
   end
 
+  def test_it_has_no_winner_if_decks_are_empty
+    card1 = Card.new(:heart, 'Jack', 11)
+    card2 = Card.new(:heart, '10', 10)
+    card3 = Card.new(:diamond, 'Jack', 11)
+    card4 = Card.new(:heart, '9', 9)
+    card5 = Card.new(:heart, '8', 8)
+    card6 = Card.new(:diamond, '8', 8)
+    card7 = Card.new(:heart, '3', 3)
+    card8 = Card.new(:diamond, '2', 2)
+
+    deck1 = Deck.new([card1, card2, card5, card8])
+    deck2 = Deck.new([card3, card4, card6, card7])
+
+    player1 = Player.new("Megan", deck1)
+    player2 = Player.new("Aurora", deck2)
+
+    turn = Turn.new(player1, player2)
+    turn.type
+    player1.deck.remove_card
+    player1.deck.remove_card
+    player1.deck.remove_card
+    player1.deck.remove_card
+    player1.deck.remove_card
+    player1.deck.remove_card
+    winner = turn.winner
+
+    assert_equal true, turn.player1.has_lost?
+
+  end
+
   def test_it_can_pile_cards_after_basic_turn
     card1 = Card.new(:heart, 'Jack', 11)
     card2 = Card.new(:heart, '10', 10)

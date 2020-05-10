@@ -20,7 +20,11 @@ class Turn
   end
 
   def winner
-    if @player1.deck.rank_of_card_at(0) != @player2.deck.rank_of_card_at(0) && @player1.deck.rank_of_card_at(0) > @player2.deck.rank_of_card_at(0)
+    if @player1.has_lost?
+      @player2
+    elsif @player2.has_lost?
+      @player1
+    elsif @player1.deck.rank_of_card_at(0) != @player2.deck.rank_of_card_at(0) && @player1.deck.rank_of_card_at(0) > @player2.deck.rank_of_card_at(0)
       @player1
     elsif @player1.deck.rank_of_card_at(0) != @player2.deck.rank_of_card_at(0) && @player1.deck.rank_of_card_at(0) < @player2.deck.rank_of_card_at(0)
       @player2
