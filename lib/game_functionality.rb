@@ -92,29 +92,34 @@ class GameFunctionality
     p "-----------------------------------------------"
     gets.chomp
     count = 0
-    if @player1.has_lost? == false && @player2.has_lost? == false
+
       loop do
-        count += 1
-        turn.type
-        winner = turn.winner
-          if turn.type == :mutually_assured_destruction
-            p "Turn #{count}: **mutually assured destruction** 6 cards removed from play"
-          elsif turn.type == :war
-            p "Turn #{count}: WAR - #{winner.name} won 6 cards"
-          else turn.type == :basic
-            p "Turn #{count}: #{winner.name} won 2 cards"
+        if @player1.has_lost? == false && @player2.has_lost? == false
+          count += 1
+          turn.type
+          winner = turn.winner
+            if turn.type == :mutually_assured_destruction
+              p "Turn #{count}: **mutually assured destruction** 6 cards removed from play"
+            elsif turn.type == :war
+              p "Turn #{count}: WAR - #{winner.name} won 6 cards"
+            else turn.type == :basic
+              p "Turn #{count}: #{winner.name} won 2 cards"
+            end
+          elsif @player1.has_lost?
+            p "~*~*~ #{@player2.name} has won the game! *~*~"
+              break
+          else @player2.has_lost?
+            p "~*~*~ #{@player1.name} has won the game! *~*~"
+              break
           end
         turn.pile_cards
         turn.award_spoils(winner)
+        @player1.deck.cards.shuffle!
+        @player2.deck.cards.shuffle!
         if count == 1000000
           p "-----DRAW-----"
           break
         end
       end
-    elsif @player1.has_lost?
-      p "~*~*~ #{@player2.name} has won the game! *~*~"
-    else @player2.has_lost?
-      p "~*~*~ #{@player1.name} has won the game! *~*~"
     end
   end
-end

@@ -7,8 +7,8 @@ class Deck
 
   def rank_of_card_at(index)
     if @cards[0].nil? == false
-      @cards[index].rank
-    elsif @cards[0].nil? == true
+      @cards.fetch(0).rank
+    elsif @cards[0].nil?
       @cards = []
     end
   end
