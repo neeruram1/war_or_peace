@@ -28,4 +28,8 @@ RSpec.describe Deck do
   it "can return the percentage of high ranking cards" do
     expect(@deck.percent_high_ranking).to eq 66.67
   end
+
+  it "can remove a card" do
+    expect(@deck.remove_card).to eq [@card2, @card3]
+  end
 end
